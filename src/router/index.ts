@@ -27,7 +27,7 @@ const routes:RouteRecordRaw[]=[
     }  
 ]
 const router=createRouter({
-    history:createWebHashHistory(),
+    history:createWebHistory(),
     routes
 })
 export default router
