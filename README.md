@@ -6,9 +6,12 @@ This is an online web-based project that records the pending tasks and their com
 - Pinia
 - pinia-plugin-persistedstate
 - Vue Router
-In this project, technologies and frameworks such as TypeScript, Less, and Element-Plus were utilized. The technical stack was based on Vue 3, Router, and Pinia. The data was stored locally and persisted using the pinia-plugin-persistedstate plugin.
+- element-plus
+- typeScript
+  项目中用到了上面的技术，便于新手学习vue3+ts的技术。
 ## 访问链接
-You can access the source code of this project through the following link.(https://github.com/missdails/my-todolist-pinia-)
+您可以通过右侧链接进入访问源码。本项目源码用于学习交流，请勿用于商业用途。(https://github.com/missdails/my-todolist-pinia-)
+
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
 Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
