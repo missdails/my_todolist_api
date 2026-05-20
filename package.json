@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "predeploy": "npm run build",   // 部署前自动执行构建
-    "deploy": "gh-pages -d dist" ,   // 将 dist 文件夹推送到 gh-pages 分支
+    "predeploy": "npm run build",   
+    "deploy": "gh-pages -d dist" ,   
     "preview": "vite preview"
   },
   "dependencies": {
