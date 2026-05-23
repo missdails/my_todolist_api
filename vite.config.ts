@@ -6,7 +6,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [vue()],
 
-  base:'/my-todolist-pinia-/',
+  base:'/',
 
   resolve:{
     alias: {

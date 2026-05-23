@@ -129,10 +129,10 @@ const handleUpdateDialog = (updatedItem:List) => {
 
 // 修改 handleEdit 函数
 const handleEdit = (id:number|string) => {
-  editDialog.value = true
-  // 需要深拷贝，避免直接引用
-  const index=store.todos.findIndex(i=>i.id===id)
-  dialogParams.value = { ...store.todos[index] }
+    editDialog.value = true
+    // 需要深拷贝，避免直接引用
+    const index=store.todos.findIndex(i=>i.id===id)
+    dialogParams.value = { ...store.todos[index] }
 }
   const handleDelete=(id:number)=>{
     store.deleteTodo(id)

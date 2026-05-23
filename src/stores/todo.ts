@@ -17,55 +17,6 @@ export const useTodoStore = defineStore("todo",()=>{
 
   /**应用了pinia-plugin-persistedstate持久化插件后， 不需要手动定义loadFromLocal和手动saveToLocal
    * 
-   * function loadFromLocal(){
-      const todoStored=localStorage.getItem('todo_content')
-      console.log('原始存储字符串',todoStored)
-      if(todoStored){
-        try{
-            const parsed=JSON.parse(todoStored)
-            console.log('解析后类型',Array.isArray(parsed),parsed)
-            Array.isArray(parsed)? parsed:[]
-        }catch(e){
-            todos.value=[]
-            console.log('loadFromLocal()-todoStored-JSON.parse(todoStored)报错',e)
-        }
-      }else{
-        todos.value=[]
-      }
-
-      const didStored=localStorage.getItem('did_content')
-      if(didStored){
-        try{
-            const parsed=JSON.parse(didStored)
-            Array.isArray(parsed)? parsed:[]
-        }catch(e){
-            dids.value=[]
-            console.log('loadFromLocal()-didStored-JSON.parse(didStored)报错')
-        }
-      }else{
-        dids.value=[]
-      }
-   
-   const undoStored=localStorage.getItem('undo_content')
-      if(undoStored){
-        try{
-            const parsed=JSON.parse(undoStored)
-            Array.isArray(parsed)? parsed:[]
-        }catch(e){
-            undos.value=[]
-            console.log('loadFromLocal()-undoStored-JSON.parse(undoStored)报错')
-        }
-      }else{
-        undos.value=[]
-      }
-   
-    }
-    loadFromLocal()
-    
-    function saveToLocal(){
-        localStorage.setItem('todo_content',JSON.stringify(todos.value))
-        localStorage.setItem('did_content',JSON.stringify(dids.value))
-        localStorage.setItem('undo_content',JSON.stringify(undos.value))
     }*/ 
 
     
