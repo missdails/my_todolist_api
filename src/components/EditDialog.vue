@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="完成时间">
         <el-date-picker 
-          v-model="dialogParams.date" 
+          v-model="dialogParams.targetDate" 
           type="datetime"
           value-format="YYYY-MM-DD HH:mm:ss"
         />
@@ -22,22 +22,24 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-interface List{
-         id:number|string,
-    content: string,
-       date: string,
- createTime:string
+interface TodoItem {
+  id: number
+  content: string
+  targetDate: string
+  createTime: string
+  status: number
+  completedTime?: string
 }
 
 const props = defineProps<{
   visible: boolean
-  params: List
+  params: TodoItem
 }>()
 
 const emit = defineEmits(['update:visible', 'save'])
 
 const visible = ref(false)
-const dialogParams = ref<List>({ ...props.params })
+const dialogParams = ref<TodoItem>({ ...props.params })
 
 watch(() => props.visible, (val) => {  
 //监听父组件传递过来的props.dialogVisible，当props.dialogVisible变化时，将最新的props.dialogVisible赋值给val（新值）

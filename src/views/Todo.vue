@@ -36,7 +36,7 @@
     <el-table-column type="index" label="序号" width="80"> 
     </el-table-column>
     <el-table-column label="待办事项" width="500px" prop="content" ></el-table-column>
-    <el-table-column label="预期完成时间" prop="date" ></el-table-column>
+    <el-table-column label="预期完成时间" prop="targetDate" ></el-table-column>
     <el-table-column label="创建时间" prop="createTime" ></el-table-column>
             <el-table-column label="操作" width="180px" >
                 <template #default="scope">
@@ -62,16 +62,9 @@ import {ElMessage, type FormInstance} from 'element-plus'
 import EditDialog from '@/components/EditDialog.vue';
 import {useTodoStore} from '@/stores/todo.ts'
 
-interface List{
-         id:number|string,
-    content: string,
-       date: string,
- createTime:string
-}
-
 const store=useTodoStore()
 
-// 本地响应式数据（如 params、selectedIds）保留，但不再直接操作 localStorage
+// 表单数据
 const params=ref({
     content: '',
     date: ''
@@ -102,12 +95,14 @@ const onSubmit = async () => {
       dateRef.value.validate()
     ])
      
-  store.addTodo({content:params.value.content,date:params.value.date})
+  store.addTodo({
+    content:params.value.content,
+    date:params.value.date
+  })
   //清空表单
       params.value={content:'',date:''}
       formRef.value?.resetFields()
       dateRef.value?.resetFields()
-      ElMessage.success('添加成功！')
     }catch(error){
         console.log("验证有误",error)
       ElMessage.warning('请输入正确的内容！')
@@ -115,15 +110,16 @@ const onSubmit = async () => {
   }
 
   const editDialog=ref(false)
-  const dialogParams=ref<List >({
-         id:'',
-    content: '',
-       date: '',
- createTime:''
+  const dialogParams=ref({
+          id: 0,
+     content: '',
+  targetDate: '',
+  createTime: '',
+  status: 0
   }) ;
   // 添加编辑保存的处理函数
-const handleUpdateDialog = (updatedItem:List) => {
-  store.updateTodo(updatedItem)
+const handleUpdateDialog = (updatedItem:any) => {
+  store.updateTodoItem(updatedItem)
   editDialog.value = false
 }
 
@@ -135,27 +131,55 @@ const handleEdit = (id:number|string) => {
     dialogParams.value = { ...store.todos[index] }
 }
   const handleDelete=(id:number)=>{
-    store.deleteTodo(id)
+    store.deleteTodoItem(id)
   }
  
-  const handleSelectionChange=(selection:List[])=>{
+  const handleSelectionChange=(selection:any[])=>{
      selectedIds.value =selection.map(item=>item.id!) //这里的！是非空断言符
      
   }
   const handleComplete=()=>{
      if(selectedIds.value.length>0){
-         store.completeTodos(selectedIds.value)
-         ElMessage.success(`已完成${selectedIds.value.length}项任务`)
+         store.completeTodoItems(selectedIds.value)
          selectedIds.value=[]
      }
   }
- let timer:number
- onMounted(()=>{
-    store.checkExpiredTasks()
-    timer=setInterval(()=>store.checkExpiredTasks(),60*1000)
- })
- onUnmounted(()=>clearInterval(timer))
+
+  // 定时器ID
+let timer: number | null = null
+  // 定时检查过期任务
+const scheduleExpiredCheck = () => {
+  // 立即执行一次检查（组件挂载时）
+  store.expiredHasTodos()
   
+  // 设置定时器，每分钟检查一次
+  timer = setInterval(() => {
+    console.log('定时检查过期任务...')
+    store.expiredHasTodos()
+  }, 60 * 1000) // 60秒 = 1分钟
+}
+
+// 清除定时器
+const clearSchedule = () => {
+  if (timer) {
+    clearInterval(timer)
+    timer = null
+    console.log('已清除过期任务检查定时器')
+  }
+}
+
+// 组件挂载
+onMounted(async () => {
+  // 加载待办数据
+  await store.loadTodos()
+  // 启动定时检查
+  scheduleExpiredCheck()
+})
+
+// 组件卸载
+onUnmounted(() => {
+  clearSchedule()
+})
 </script>
 
 <style scoped>

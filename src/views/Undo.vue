@@ -3,7 +3,7 @@
     <el-table-column type="index" label="序号" width="80" />
     <el-table-column label="待办事项" prop="content" />
     <el-table-column label="创建时间" prop="createTime" />
-    <el-table-column label="预期完成时间" prop="date" />
+    <el-table-column label="预期完成时间" prop="targetDate" />
     <el-table-column label="操作" width="240" align="center">
       <template #default="scope">
         <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -21,26 +21,20 @@
 </template>
 <script setup lang="ts">
 import { useTodoStore } from '@/stores/todo.ts'
-import {ref} from 'vue'
+import {ref,onMounted} from 'vue'
 import EditDialog from '@/components/EditDialog.vue';
 
-interface List{
-         id:number|string,
-    content: string,
-       date: string,
- createTime:string
-}
 const store=useTodoStore()
 const editDialog=ref(false)
-const dialogParams=ref<List>({
-         id:'',
-    content: '',
-       date: '',
- createTime:''
-}
-)
+const dialogParams = ref({
+  id: 0,
+  content: '',
+  targetDate: '',
+  createTime: '',
+  status: 2
+})
 
-const handleEdit=(item:List)=>{ 
+const handleEdit=(item:any)=>{ 
     console.log('编辑的 item:', item) //打开编辑窗，将该条数据的参数赋值给dialogParams（将通过:params="dialogParams"赋值给子组件）
     editDialog.value=true
     const index=store.undos.findIndex(i=>i.id===item.id)
@@ -53,7 +47,7 @@ const handleUpdateDialog=(item:any)=>{  //更新编辑内容到Undo.vue组件
     if(new Date(item.date).getTime()>now.getTime()){
         store.undoMoveTodo(item)
     }else{
-        store.updateUndo(item)
+        store.updateUndoItem(item)
     }
     
     editDialog.value=false
@@ -63,7 +57,11 @@ const handleComplete=(item:any)=>{  //将未完成的事项改为完成
 
 }
 const handleDelete=(id:number)=>{  //删除未完成事项
-    store.deleteUndo(id)
+    store.deleteUndoItem(id)
 }
-   
+// 组件挂载
+onMounted(async () => {
+  // 加载已完成数据
+  await store.loadUndos()
+})
 </script>
